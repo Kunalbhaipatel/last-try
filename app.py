@@ -264,6 +264,50 @@ def render_cost_estimator(df):
 
     stacked_cost_chart(summary)
 
+# ------------------------- EXECUTIVE SUMMARY -------------------------
+def render_executive_summary(df):
+    st.title("📄 Executive Summary")
+    filtered_df = apply_shared_filters(df)
+    total_wells = filtered_df["Well_Name"].nunique()
+    avg_rop = filtered_df["ROP"].mean()
+    avg_amw = filtered_df["AMW"].mean()
+    avg_dil = filtered_df["Dilution_Ratio"].mean()
+    avg_discard = filtered_df["Discard Ratio"].mean()
+
+    top_well = filtered_df.loc[filtered_df["ROP"].idxmax()]
+    low_well = filtered_df.loc[filtered_df["ROP"].idxmin()]
+
+    st.markdown(f"""
+### 🛠️ Drilling Performance Overview
+- Total Wells: **{total_wells}**
+- Average ROP: **{avg_rop:.1f} ft/hr**
+- Average Mud Weight: **{avg_amw:.2f} ppg**
+- Avg Dilution Ratio: **{avg_dil:.2f}**
+- Avg Discard Ratio: **{avg_discard:.2f}**
+
+### 🔍 ROP Extremes
+- **Fastest Well**: `{top_well['Well_Name']}` @ **{top_well['ROP']:.1f} ft/hr**
+- **Slowest Well**: `{low_well['Well_Name']}` @ **{low_well['ROP']:.1f} ft/hr**
+""")
+
+    summary_text = f"Exec Summary for {total_wells} wells\nAvg ROP: {avg_rop:.1f}\n..."
+    st.download_button("📥 Download Summary", summary_text, file_name="executive_summary.txt")
+
+# ------------------------- ENHANCED VISUAL CHARTS -------------------------
+def radar_chart_multi_kpi(filtered_df):
+    st.subheader("🕸️ Multi-KPI Radar Comparison")
+    radar_metrics = ["ROP", "Dilution_Ratio", "Discard Ratio", "AMW", "Haul_OFF"]
+    radar_df = filtered_df.groupby("Well_Name")[radar_metrics].mean().reset_index()
+    selected_wells = st.multiselect("Select Wells for Radar Chart", radar_df["Well_Name"].unique(), default=radar_df["Well_Name"].unique()[:3])
+    radar_data = radar_df[radar_df["Well_Name"].isin(selected_wells)]
+    fig = go.Figure()
+    for _, row in radar_data.iterrows():
+        fig.add_trace(go.Scatterpolar(r=row[radar_metrics].values, theta=radar_metrics, fill='toself', name=row["Well_Name"]))
+    fig.update_layout(polar=dict(radialaxis=dict(visible=True)), showlegend=True)
+    st.plotly_chart(fig, use_container_width=True)
+
+# (Other enhanced visuals like cumulative_wells_chart, fluid_pie_chart_by_operator, etc. can be similarly embedded below...)
+
 # ------------------------- MAIN ENTRY POINT -------------------------
 load_styles()
 df = pd.read_csv("Refine Sample.csv")
@@ -274,7 +318,7 @@ page = st.sidebar.radio("📂 Navigate", [
     "Sales Analysis",
     "Advanced Analysis",
     "Cost Estimator",
-    "executive summary"
+    "Executive Summary"
 ])
 
 if page == "Multi-Well Comparison":
@@ -285,5 +329,5 @@ elif page == "Advanced Analysis":
     render_advanced_analysis(df)
 elif page == "Cost Estimator":
     render_cost_estimator(df)
-elif page == "executive summary":
+elif page == "Executive Summary":
     render_executive_summary(df)
