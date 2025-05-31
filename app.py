@@ -7,6 +7,9 @@ import plotly.graph_objects as go
 
 from advanced_analysis import render_advanced_analysis
 from cost_estimator import render_cost_estimator
+from executive_summary import render_executive_summary
+from multi_well import render_multi_well
+from sales_analysis import render_sales_analysis
 
 st.set_page_config(page_title="Prodigy IQ Dashboard", layout="wide", page_icon="📊")
 
