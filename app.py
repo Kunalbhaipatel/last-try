@@ -285,5 +285,5 @@ elif page == "Advanced Analysis":
     render_advanced_analysis(df)
 elif page == "Cost Estimator":
     render_cost_estimator(df)
-elif page == "Executive Summary":
+elif page == "executive summary":
     render_executive_summary(df)
