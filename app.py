@@ -5,15 +5,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from enhanced_visuals import (
-    radar_chart_multi_kpi,
-    cumulative_wells_chart,
-    fluid_pie_chart_by_operator,
-    kpi_heatmap,
-    kpi_boxplot,
-    stacked_cost_chart
-)
-from executive_summary import render_executive_summary
 from advanced_analysis import render_advanced_analysis
 from cost_estimator import render_cost_estimator
 
