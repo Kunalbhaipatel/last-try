@@ -274,7 +274,7 @@ page = st.sidebar.radio("📂 Navigate", [
     "Sales Analysis",
     "Advanced Analysis",
     "Cost Estimator",
-    "Executive Summary"
+    "executive summary"
 ])
 
 if page == "Multi-Well Comparison":
