@@ -5,9 +5,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from advanced_analysis import render_advanced_analysis
-from cost_estimator import render_cost_estimator
-from executive_summary import render_executive_summary
 from multi_well import render_multi_well
 from sales_analysis import render_sales_analysis
 
